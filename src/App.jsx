@@ -1,15 +1,42 @@
+import Home from "./Home";
+import DetailPage from "./DetailPage";
+import Layout from "./Layout";
+import NoPage from "./NoPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  RiMoonFill,
-  RiMoonLine,
-  RiSearchLine,
-  RiArrowDownSLine,
-} from "react-icons/ri";
 
 const App = () => {
   const [countries, setCountries] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  const handleTheme = () => {
+    const body = document.querySelector("body");
+    if (theme === "light") {
+      body.classList.remove("light");
+      body.classList.add("dark");
+      setTheme("dark");
+      localStorage.setItem("theme", "dark");
+    }
+    if (theme === "dark") {
+      body.classList.remove("dark");
+      body.classList.add("light");
+      setTheme("light");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   useEffect(() => {
+    const loadTheme = () => {
+      const body = document.querySelector("body");
+      if (theme === "light") {
+        body.classList.add("light");
+      }
+      if (theme === "dark") {
+        body.classList.add("dark");
+      }
+    };
+
     const fetchCountries = async () => {
       try {
         const response = await fetch(
@@ -19,99 +46,31 @@ const App = () => {
         setCountries(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCountries();
+    loadTheme();
   }, []);
-
-  const showFilterOptions = () => {
-    const filterOptions = document.querySelector(".filter__options");
-    filterOptions.classList.toggle("show");
-  };
-
-  const formatPopulation = (population) => {
-    return population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const switchTheme = () => {
-    const body = document.querySelector("body");
-    if (body.classList.contains("dark")) {
-      body.classList.replace("dark", "light");
-    } else {
-      body.classList.replace("light", "dark");
-    }
-  };
 
   return (
     <>
-      <header>
-        <h1>Where in the world?</h1>
-        <button onClick={switchTheme}>
-          <RiMoonFill />
-          Dark Mode
-        </button>
-      </header>
-      <main>
-        <div className="container">
-          <nav>
-            <form>
-              <RiSearchLine className="search-icon" />
-              <label htmlFor="input">InputField</label>
-              <input
-                type="text"
-                id="input"
-                placeholder="Search for a country..."
-              />
-            </form>
-            <div className="filter">
-              <div className="select" onClick={showFilterOptions}>
-                <p>Filter by Region</p>
-                <RiArrowDownSLine className="arrow-icon" />
-              </div>
-              <ul className="filter__options">
-                <li>All</li>
-                <li>Africa</li>
-                <li>America</li>
-                <li>Asia</li>
-                <li>Europe</li>
-                <li>Oceania</li>
-              </ul>
-            </div>
-          </nav>
-          <div className="countries">
-            {countries.map((country) => {
-              return (
-                <div className="country" key={country.cca3}>
-                  <img
-                    width="256px"
-                    height="400px"
-                    src={country.flags.png}
-                    alt={country.flags.alt}
-                    className="country__flag"
-                  />
-                  <div className="country__info">
-                    <h2>{country.name.common}</h2>
-                    <p>
-                      <span>Population:</span>{" "}
-                      {formatPopulation(country.population)}
-                    </p>
-                    <p>
-                      <span>Region:</span> {country.region}
-                    </p>
-                    <p>
-                      <span>Capital:</span>
-                      {country.capital.length !== 0
-                        ? country.capital.join(", ")
-                        : "N/A"}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-            ;
-          </div>
-        </div>
-      </main>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<Layout handleTheme={handleTheme} theme={theme} />}
+          >
+            <Route
+              index
+              element={<Home countries={countries} isLoading={isLoading} />}
+            />
+            <Route path="/:id" element={<DetailPage />} />
+            <Route path="*" element={<NoPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };
