@@ -15,6 +15,7 @@
     --color-text-top: hsl(0, 0%, 100%);
     --color-input: hsl(0, 0%, 100%);
     --color-bg-input: hsl(209, 23%, 22%);
+    --color-bg-hover: hsl(212, 44%, 8%);
   }
 
   .light {
@@ -24,6 +25,7 @@
     --color-text-top: hsl(200, 15%, 8%);
     --color-input: hsl(0, 0%, 52%);
     --color-bg-input: hsl(0, 0%, 100%);
+    --color-bg-hover: hsl(0, 14%, 80%);
   }
 }
 
@@ -82,6 +84,10 @@ header button {
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 300;
+}
+
+header button:hover {
+  color: rgb(32, 52, 231);
 }
 
 main {
@@ -188,7 +194,7 @@ form input::placeholder {
 }
 
 .filter__options li:hover {
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-hover);
 }
 
 .countries {
@@ -229,23 +235,126 @@ form input::placeholder {
   padding: 1rem;
 }
 
-.country__info h2 {
+.country__info h2,
+.detail__info h2 {
   margin-bottom: 5px;
   font-size: 1.3rem;
   font-weight: 800;
 }
 
-.country__info p {
+.country__info p,
+.detail__info p {
   font-size: 0.9rem;
   margin-bottom: 0.2rem;
 }
 
-.country__info p span {
+.country__info p span,
+.detail__info p span {
   font-weight: 600;
-  margin-right: 3px;
+  margin-right: 6px;
 }
 
 .link {
   text-decoration: none;
   color: inherit;
+}
+
+.detail-nav {
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
+
+.detail-nav button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-text);
+  background-color: var(--color-bg-top);
+  border: none;
+  padding: 0.8rem 1.3rem;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+.detail-nav button:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.detail-nav-icon {
+  margin-right: 1rem;
+  font-size: 1.3rem;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  @media (min-width: 1000px) {
+    flex-direction: row;
+    gap: 5rem;
+  }
+  @media (min-width: 1300px) {
+    gap: 10rem;
+  }
+}
+
+.detail img {
+  width: 100%;
+  max-width: 400px;
+  object-fit: cover;
+  @media (min-width: 1200px) {
+    max-width: 550px;
+  }
+}
+
+.detail__info h2 {
+  margin: 2rem 0;
+  @media (min-width: 1200px) {
+    font-size: 1.6rem;
+  }
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  gap: 2rem;
+  @media (min-width: 660px) {
+    flex-direction: row;
+    gap: 3rem;
+  }
+}
+
+.bold-text {
+  font-size: 1.3rem;
+}
+
+.border-countries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  @media (min-width: 660px) {
+  }
+}
+
+.border-country-btn {
+  background-color: var(--color-bg-top);
+  color: var(--color-text);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  @media (min-width: 1200px) {
+    font-size: 1rem;
+  }
+}
+
+.border-country-btn:hover {
+  background-color: var(--color-bg-hover);
+}
+
+@media (min-width: 1200px) {
+  .detail p {
+    font-size: 1.3rem;
+  }
 }
